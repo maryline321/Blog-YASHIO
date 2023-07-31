@@ -16,6 +16,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/post/{id}', [PostController::class, 'show']);
+Route::get('/posts', [PostController::class, 'index']);
+Route::post('/addpost', [PostController::class, 'store']);
+
+
 // Route::prefix('api/v1')->group(function () {
 //     Route::prefix('posts')->group(function () {
 //         Route::get('/', 'PostController@index');      
@@ -24,16 +29,9 @@ use Illuminate\Support\Facades\Route;
         
 //     });
 
-Route::get('/getpost/{id}', [PostController::class, 'index']);
-Route::get('/getposts}', [PostController::class, 'show']);
-Route::post('/addpost', [PostController::class, 'store']);
-
-Route::get('/gettags', [TagController::class, 'index']);
-Route::post('/addtags', [TagController::class, 'store']);
-
 //     Route::prefix('tags')->group(function () {
 //         Route::get('/', 'TagController@index');        
-//         Route::post('/', 'TagController@store');      
+//               
 //     });
 // });
 

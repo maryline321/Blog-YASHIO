@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    protected $fillable = ['title', 'description','tags'];
 
-    public function tags()
-    {
-        return $this->belongsToMany(Tag::class);
-    }
+    protected $fillable = ['title', 'description', 'tags'];
+
+    protected $casts = [
+        'tags' => 'array',
+    ];
 }
