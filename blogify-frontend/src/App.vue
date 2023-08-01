@@ -1,23 +1,54 @@
 <template>
+  <div class="app-container">
+    
+   
+  
+   <main>
+    <MainBar :toggleForm="toggleForm" />
+    <PostList />
+    <PostForm  v-if="formActive" :toggleForm="toggleForm"/>
+   
+   </main>
+  
+   
 
-<PostList />
-
+  </div>
 </template>
 
 <script>
-import PostList from './components/PostList.vue'
 
+import PostList from "./components/PostList.vue";
+import PostForm from "./components/PostForm.vue";
+import MainBar from "./components/MainBar.vue";
+import { ref } from 'vue'
 
 export default {
   name: 'App',
   components:{
-  PostList,
-  
- },
+    PostList,
+    MainBar,
+    PostForm
+},
+
+setup (){
+
+  const formActive =ref (false);
+
+  const toggleForm = (id=false)=>{
+    formActive.value=!formActive.value;
+
+    console.log(id);
+  }
+
+  return{
+    formActive,
+    toggleForm
+  }
+},
 
  data() {
     return {
-      post: null, // or your post data object
+      post: null, 
     };
     },
 };

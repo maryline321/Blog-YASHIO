@@ -6,11 +6,12 @@ import PostDetails from '../components/PostDetails.vue';
 const routes = [
  
   {
-    path: '/posts',
+    path: '/',
     component: PostList,
   },
   {
     path: '/addpost',
+    name:'createPost',
     component: PostForm,
   },
   {
