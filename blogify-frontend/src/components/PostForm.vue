@@ -1,33 +1,20 @@
 <template>
   <div v-if="!submitted" class="form-overlay" @click="toggleForm()">
     <div class="form-content" @click.stop>
+      <button class="close" @click="toggleForm()">Close</button>
       <h2>Create Post</h2>
 
       <div class="main-block">
         <form @submit.prevent="postSubmit">
           <div class="info">
-            <input
-              class="fname"
-              type="text"
-              name="title"
-              id="title"
-              v-model="title"
-              placeholder="Title"
-              required
+            <input class="fname" type="text" name="title" id="title" v-model="title" placeholder="Enter Title" required
               @click.stop
             />
           </div>
           <div>
-            <textarea rows="4" v-model="description" required @click.stop></textarea>
+            <textarea rows="4" v-model="description" placeholder="Enter Description" required @click.stop></textarea>
           </div>
-          <input
-            class="fname"
-            type="text"
-            name="tags"
-            id="tags"
-            v-model="tags"
-            placeholder="Tags"
-            required
+          <input class="fname" type="text" name="tags" id="tags" v-model="tags" placeholder="Enter Tags" required
             @click.stop
           />
           <button type="submit">Submit</button>
@@ -63,7 +50,7 @@ const postSubmit = async () => {
       },
       data: {
         title: title.value,
-        description: description.value, 
+        description: description.value,
         tags: tags.value
       }
     }
@@ -74,17 +61,18 @@ const postSubmit = async () => {
 
     console.log('Response:', response.data)
 
-    submitted.value = true; // Update the submitted status to true after successful submission
-    
+    submitted.value = true;
+
+    // Clear form fields after successful submission
+    title.value = '';
+    description.value = '';
+    tags.value = '';
   } catch (error) {
     console.error('Error:', error)
   }
 }
 
 const toggleForm = () => {
-  // This function will be called when the form overlay is clicked
-  // You can customize its behavior as needed
-  // For this example, we'll simply toggle the 'submitted' value
   submitted.value = !submitted.value;
 }
 </script>
@@ -162,14 +150,16 @@ button {
   color: #fff;
 }
 .close {
-  width: 100%;
-  padding: 10px;
+  width: fit-content; /* Reduce width to fit the button content */
+  padding: 8px 12px; /* Adjust padding for a smaller button */
+  position: absolute;
+  bottom: 100px; /* Adjust bottom positioning to place it in the bottom-right corner */
+  right: 360px; /* Adjust right positioning to place it in the bottom-right corner */
   border: none;
   background: #c9331c;
   font-size: 16px;
   font-weight: 400;
   color: #fff;
-  margin-top: 5px;
 }
 .close:hover {
   background: #a02323;

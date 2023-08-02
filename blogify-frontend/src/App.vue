@@ -7,6 +7,7 @@
     <MainBar :toggleForm="toggleForm" />
     <PostList />
     <PostForm  v-if="formActive" :toggleForm="toggleForm"/>
+    <!-- <PostDetails /> -->
    
    </main>
   
@@ -21,13 +22,15 @@ import PostList from "./components/PostList.vue";
 import PostForm from "./components/PostForm.vue";
 import MainBar from "./components/MainBar.vue";
 import { ref } from 'vue'
+// import PostDetails from "./components/PostDetails.vue";
 
 export default {
   name: 'App',
   components:{
     PostList,
     MainBar,
-    PostForm
+    PostForm,
+    // PostDetails
 },
 
 setup (){

@@ -7,6 +7,7 @@ const routes = [
  
   {
     path: '/',
+    name: "postsList",
     component: PostList,
   },
   {
@@ -16,6 +17,7 @@ const routes = [
   },
   {
     path: '/post/:id',
+    name: "postDetails",
     component: PostDetails,
     props: true,
   },
