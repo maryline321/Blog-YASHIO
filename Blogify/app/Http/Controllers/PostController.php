@@ -4,23 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Http\Requests\CreatePostRequest;
+
 class PostController extends Controller
 {
-    public function store(Request $request)
+    public function store(CreatePostRequest $request)
     {
         
-        $request->validate([
-            'title' => 'required|max:255',
-            'description' => 'required',
-            'tags' => 'required',
-        ]);
-
-        
-        $post = new Post();
-        $post->title = $request->input('title');
-        $post->description = $request->input('description');
-        $post->tags = $request->input('tags');
-        $post->save();
+        $post = Post::create($request->validated());
 
         return response()->json(['message' => 'Post created successfully', 'post' => $post], 201);
     }

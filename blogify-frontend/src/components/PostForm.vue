@@ -150,11 +150,11 @@ button {
   color: #fff;
 }
 .close {
-  width: fit-content; /* Reduce width to fit the button content */
-  padding: 8px 12px; /* Adjust padding for a smaller button */
+  width: fit-content; 
+  padding: 8px 12px; 
   position: absolute;
-  bottom: 100px; /* Adjust bottom positioning to place it in the bottom-right corner */
-  right: 360px; /* Adjust right positioning to place it in the bottom-right corner */
+  bottom: 100px; 
+  right: 360px; 
   border: none;
   background: #c9331c;
   font-size: 16px;
