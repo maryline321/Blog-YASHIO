@@ -20,6 +20,9 @@ Route::get('/post/{id}', [PostController::class, 'show']);
 Route::get('/posts', [PostController::class, 'index']);
 Route::post('/addpost', [PostController::class, 'store']);
 
+//tags
+Route::get('/tags',[TagController::class, 'index']);
+Route::get('/tags/{tag}',[TagController::class, 'showTag']);
 
 // Route::prefix('api/v1')->group(function () {
 //     Route::prefix('posts')->group(function () {

@@ -21,7 +21,7 @@
     <div class="modal-content">
       <h2>{{ selectedPost.title }}</h2>
       <p class="description">{{ selectedPost.description }}</p>
-      <p class="tag-button">{{ selectedPost.tags }}</p>
+      <p class="tag-button">{{ selectedPost.tags.name }}</p>
     </div>
   </div>
   <div class="modal-overlay" @click="closePost"></div>
@@ -127,12 +127,12 @@ export default {
     };
   },
   mounted() {
-    this.fetchPosts();
+    this.fetchPosts('/posts');
   },
   methods: {
-    fetchPosts() {
+    fetchPosts(route) {
       axios
-        .get("http://localhost:8000/api/posts")
+        .get("http://localhost:8000/api"+route)
         .then((response) => {
           this.posts = response.data;
         })

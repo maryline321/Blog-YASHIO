@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+    use HasFactory;
+    protected $fillable = ['title', 'description', 'tag_id'];
 
-    protected $fillable = ['title', 'description', 'tags'];
-
-    protected $casts = [
-        'tags' => 'array',
-    ];
+    protected $with = ["tags"];
+    public function tags()
+    {
+        return $this->belongsTo(Tag::class, 'tag_id');
+    }
 }

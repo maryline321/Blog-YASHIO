@@ -1,84 +1,74 @@
 <template>
-  <div v-if="!submitted" class="form-overlay" @click="toggleForm()">
-    <div class="form-content" @click.stop>
-      <button class="close" @click="toggleForm()">Close</button>
-      <h2>Create Post</h2>
+  <div>
+    <div v-if="!submitted" class="form-overlay" @click="toggleForm()">
+      <div class="form-content" @click.stop>
+        <button class="close" @click="toggleForm()">Close</button>
+        <h2>Create New Post</h2>
 
-      
-      <div v-if="successMessage" class="success-message">
-        {{ successMessage }}
-      </div>
-
-      <div class="main-block">
-        <form @submit.prevent="postSubmit">
-
-          <div class="form-group">
-            <label for="title" class="label">Title:</label>
-            <input class="fname" type="text" name="title" id="title" v-model="title" placeholder="Enter Title" @click.stop />
-            <div v-if="errors.title" class="error-message">{{ errors.title }}</div>
-          </div>
-
-          <div class="form-group">
-            <label for="description" class="label">Description:</label>
-            <textarea rows="4" v-model="description" id="description" placeholder="Enter Description" @click.stop></textarea>
-            <div v-if="errors.description" class="error-message">{{ errors.description }}</div>
-          </div>
-
-          <div class="form-group">
-            <label for="tags" class="label">Tags:</label>
-            <input class="fname" type="text" name="tags" id="tags" v-model="tags" placeholder="Enter Tags" @click.stop />
-            <div v-if="errors.tags" class="error-message">{{ errors.tags }}</div>
-          </div>
-
-          <button type="submit">Submit</button>
-        </form>
+        <div class="main-block">
+          <form @submit.prevent="postSubmit">
+            <div class="form-group">
+              <label for="title" class="label">Title</label>
+              <input class="input-field" type="text" id="title" v-model="title" placeholder="Enter Title" @click.stop/>
+              <div v-if="errors.title" class="error-message">{{ errors.title[0] }}</div>
+            </div>
+            <div class="form-group">
+              <label for="description" class="label">Description</label>
+              <textarea rows="4" class="textarea-field" v-model="description" placeholder="Enter Description" @click.stop></textarea>
+              <div v-if="errors.description" class="error-message">{{ errors.description[0] }}</div>
+            </div>
+            <div class="form-group">
+              <label for="tags" class="label">Tags</label>
+              <select name="tags" id="tags" v-model="tags" class="select-field">
+                <option value="" disabled selected>Select Tag</option>
+                <option :value="tag.id" v-for="tag in all_tags" :key="tag.id" aria-placeholder="Select Tag">{{tag.name}}</option>
+              </select>
+        
+              <div v-if="errors.tags" class="error-message">{{ errors.tags[0] }}</div>
+            </div>
+            <button type="submit" class="submit-button">Submit</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-
 <script setup>
-import { ref } from 'vue'
+import { ref,onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
 const router = useRouter()
-
+var all_tags = ref([])
+console.log(all_tags)
 const redirectToPost = () => {
   router.push('/')
 }
 
+onBeforeMount(async () => {
+  let config = {
+      method: 'get',
+      url: 'http://127.0.0.1:8000/api/tags',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }
+
+    const response = await axios(config)
+
+    all_tags.value = response.data.data
+
+    
+})
 const title = ref('')
 const description = ref('')
 const tags = ref('')
-const submitted = ref(false) 
-const successMessage = ref('') 
-const errors = ref({}) 
+const submitted = ref(false)
+const errors = ref({})
 
 const postSubmit = async () => {
-  
-  errors.value = {}
-
   try {
-    
-    if (!title.value.trim()) {
-      errors.value.title = 'Title field is required!.'
-    }
-
-    if (!description.value.trim()) {
-      errors.value.description = 'Description field is required!.'
-    }
-
-    if (!tags.value.trim()) {
-      errors.value.tags = 'Tags field is required!.'
-    }
-
-  
-    if (Object.keys(errors.value).length > 0) {
-      return 
-    }
-
     let config = {
       method: 'post',
       url: 'http://127.0.0.1:8000/api/addpost',
@@ -88,24 +78,30 @@ const postSubmit = async () => {
       data: {
         title: title.value,
         description: description.value,
-        tags: tags.value
+        tag_id: tags.value
       }
     }
 
-    await axios(config)
+    const response = await axios(config)
 
     redirectToPost()
 
-    successMessage.value = 'Post submitted successfully!';
+    console.log('Response:', response.data)
 
-    
+    submitted.value = true;
+
     title.value = '';
     description.value = '';
     tags.value = '';
+  } 
+  
+  catch (error) {
+    console.error('Error:', error.response?.data);
 
-    submitted.value = true; 
-  } catch (error) {
-    console.error('Error:', error)
+    if (error.response && error.response.status === 422) {
+     
+      errors.value = error.response.data.errors;
+    }
   }
 }
 
@@ -113,7 +109,6 @@ const toggleForm = () => {
   submitted.value = !submitted.value;
 }
 </script>
-
 
 
 <style scoped>
@@ -193,12 +188,23 @@ button {
   color: #fff;
   cursor: pointer; 
 }
+.main-block {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.label {
+  font-weight: bold;
+}
 
 .close {
   width: fit-content; 
   padding: 8px 12px; 
   position: absolute;
-  bottom: 80px;
+  bottom: 100px;
   right: 450px; 
   border: none;
   background: #c9331c;
@@ -244,4 +250,33 @@ button:hover {
   font-size: 12px;
   text-align: left;
 }
+.input-field,
+  .textarea-field,
+  .select-field {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 10px;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 10 L16 26 30 10 Z'/%3E%3C/svg%3E"),
+      linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%);
+    background-repeat: no-repeat, repeat;
+    background-position: right 10px top 50%, 0 0;
+    background-size: 10px auto, 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+  }
+
+  /* Remove the default arrow icon in Firefox */
+  select::-ms-expand {
+    display: none;
+  }
 </style>

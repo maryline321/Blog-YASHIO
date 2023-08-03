@@ -5,8 +5,10 @@
   
    <main>
     <MainBar :toggleForm="toggleForm" />
-    <PostList />
+    <!-- <PostList /> -->
     <PostForm  v-if="formActive" :toggleForm="toggleForm"/>
+
+   
     <!-- <PostDetails /> -->
    
    </main>
@@ -14,22 +16,25 @@
    
 
   </div>
+  <RouterView/>
 </template>
 
 <script>
 
-import PostList from "./components/PostList.vue";
+// import PostList from "./components/PostList.vue";
 import PostForm from "./components/PostForm.vue";
 import MainBar from "./components/MainBar.vue";
 import { ref } from 'vue'
+// import { RouterView } from "vue-router";
 // import PostDetails from "./components/PostDetails.vue";
 
 export default {
   name: 'App',
   components:{
-    PostList,
+    // PostList,
     MainBar,
     PostForm,
+    
     // PostDetails
 },
 
