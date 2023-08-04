@@ -14,7 +14,7 @@ class Tag extends Model
     public function posts()
     {
         
-        return $this->hasMany(Post::class);
+        return $this->belongsToMany(Post::class, 'post_tags','tag_id','post_id');
     }
     protected $hidden = [
         'created_at',

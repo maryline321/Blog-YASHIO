@@ -19,11 +19,15 @@
             </div>
             <div class="form-group">
               <label for="tags" class="label">Tags</label>
-              <select name="tags" id="tags" v-model="tags" class="select-field">
+              <!-- <select name="tags" id="tags" v-model="tags" class="select-field">
                 <option value="" disabled selected>Select Tag</option>
                 <option :value="tag.id" v-for="tag in all_tags" :key="tag.id" aria-placeholder="Select Tag">{{tag.name}}</option>
-              </select>
-        
+              </select> -->
+              <Multiselect
+      v-model="val"
+      mode = "multiple"
+      :options="all_tags"
+    />
               <div v-if="errors.tags" class="error-message">{{ errors.tags[0] }}</div>
             </div>
             <button type="submit" class="submit-button">Submit</button>
@@ -33,6 +37,28 @@
     </div>
   </div>
 </template>
+
+<script>
+  import Multiselect from '@vueform/multiselect'
+
+  export default {
+    components: {
+      Multiselect,
+    },
+    data() {
+      return {
+        value: null,
+        options: [
+          // 'Batman',
+          // 'Robin',
+          // 'Joker',
+        ]
+      }
+    }
+  }
+  </script>
+
+  <style src="@vueform/multiselect/themes/default.css"></style>
 
 <script setup>
 import { ref,onBeforeMount } from 'vue'
@@ -46,6 +72,7 @@ const redirectToPost = () => {
   router.push('/')
 }
 
+const val = ref([])
 onBeforeMount(async () => {
   let config = {
       method: 'get',
@@ -68,6 +95,7 @@ const submitted = ref(false)
 const errors = ref({})
 
 const postSubmit = async () => {
+  console.log(val.value);
   try {
     let config = {
       method: 'post',

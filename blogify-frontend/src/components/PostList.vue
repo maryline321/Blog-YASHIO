@@ -134,7 +134,7 @@ export default {
       axios
         .get("http://localhost:8000/api"+route)
         .then((response) => {
-          this.posts = response.data;
+          this.posts = response.data.data;
         })
         .catch((error) => {
           console.error(error);
